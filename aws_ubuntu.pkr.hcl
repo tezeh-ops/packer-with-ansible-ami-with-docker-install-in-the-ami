@@ -8,7 +8,7 @@ packer {
 }
 
 source "amazon-ebs" "ubuntu" {
-  ami_name      = "packer-with-docker-ubuntu-ami"
+  ami_name      = "ansibel-packer-ubuntu-ami"
   instance_type = "t2.micro"
   region        = "us-west-2"
   source_ami_filter {
@@ -28,7 +28,10 @@ build {
   sources = [
     "source.amazon-ebs.ubuntu"
   ]
-   provisioner "shell" {      #if we pass a script to intall software in our image so we pass this ptovisioner to run the script
-    script = "./docker.sh"  # this the file (docker.sh) that contain my docker software. we are calling it here.
+  provisioner "shell" {     #if we pass a script to intall software in our image so we pass this ptovisioner to run the script
+    script = "./ansible.sh" # this the file (docker.sh) that contain my docker software. we are calling it here.
+  }
+  provisioner "ansible-local" {
+    playbook_file = "./docker.yml"
   }
 } 
